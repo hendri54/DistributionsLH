@@ -25,26 +25,29 @@ function uniform_test(um :: AbstractUniform{T1}) where T1 <: AbstractFloat
 end
 
 
-function um_test()
-    switches = DistributionsLH.make_test_uniform_switches();
-    um = init_uniform(ObjectId(:none), switches);
-    uniform_test(um);
-end
+# function um_test()
+#     switches = DistributionsLH.make_test_uniform_switches();
+#     um = init_uniform(ObjectId(:none), switches);
+#     uniform_test(um);
+# end
 
-function um_fixed_bounds_test()
-    um = UniformFixedBounds(ObjectId(:none), 2.0, 4.0);
-    uniform_test(um);
-end
+# function um_fixed_bounds_test()
+#     um = UniformFixedBounds(ObjectId(:none), 2.0, 4.0);
+#     uniform_test(um);
+# end
 
-function centered_test()
-    um = DistributionsLH.make_test_uniform_centered();
-    uniform_test(um);
-end
+# function centered_test()
+#     um = DistributionsLH.make_test_uniform_centered();
+#     uniform_test(um);
+# end
 
 @testset "Uniform marginal" begin
-    um_test()
-    um_fixed_bounds_test()
-    centered_test()
+    for um in [DistributionsLH.make_test_uniform(), 
+        DistributionsLH.make_test_uniform_centered(),
+        DistributionsLH.make_test_uniform_fixed()]
+
+        uniform_test(um);
+    end
 end
 
 # ----------

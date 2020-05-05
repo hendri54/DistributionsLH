@@ -107,6 +107,7 @@ function UniformFixedBounds(objId :: ObjectId, lb :: T1, ub :: T1) where
     # return UniformMarginal(objId, lb, dx, pvec)
 end
 
+make_test_uniform_fixed() = UniformFixedBounds(ObjectId(:test), -1.0, 2.0);
 
 
 ## ----------------  Uniform with mean and range
@@ -148,7 +149,7 @@ function init_uniform(objId :: ObjectId, switches :: UniformCenteredSwitches)
     pRange = init_xrange(switches);
     pvec = ParamVector(objId, [pMean, pRange]);
     xMean = ModelParams.value(pMean);
-    return Uniform(objId, xMean, ModelParams.value(pRange), pvec)
+    return UniformCentered(objId, xMean, ModelParams.value(pRange), pvec)
 end
 
 init_xmean(s :: UniformCenteredSwitches) = 
