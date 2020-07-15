@@ -1,5 +1,16 @@
-abstract type AbstractUniform{T1 <: AbstractFloat} <: AbstractDistributionLH end
-abstract type AbstractUniformSwitches{T1 <: AbstractFloat} <: AbstractDistributionSwitches end
+"""
+	$(SIGNATURES)
+
+Abstract Uniform type. 
+"""
+abstract type AbstractUniform{T1} <: AbstractDistributionLH{T1} end
+
+"""
+	$(SIGNATURES)
+
+Abstract type for switches governing how Uniform distributions are parameterized.
+"""
+abstract type AbstractUniformSwitches{T1} <: AbstractDistributionSwitches{T1} end
 
 
 ## -------------------  Generic
@@ -15,6 +26,8 @@ quantiles(u :: AbstractUniform{T1}, pctV)  where T1 <: AbstractFloat =
     min_value(u) .+ value_range(u) .* T1.(pctV);
 
 Base.eltype(::AbstractUniform{T1}) where T1 <: AbstractFloat = T1;
+
+isbounded(u :: AbstractUniform{T1}) where T1 = true;
 
 Base.show(io :: IO, um :: AbstractUniform{T1}) where T1 = 
     print(io, "Uniform{$T1} over range $(min_value(um)) to $(max_value(um))");
@@ -38,7 +51,7 @@ end
 ## ----------------  Uniform with minimum and range
 
 # The defaults really don't make all that much sense, but we want a keyword constructor
-@with_kw mutable struct UniformSwitches{T1 <: AbstractFloat} <: AbstractUniformSwitches{T1}
+Base.@kwdef mutable struct UniformSwitches{T1 <: AbstractFloat} <: AbstractUniformSwitches{T1}
     xMin :: T1 = 1.0
     xMinLb :: T1 = 0.1
     xMinUb :: T1 = 100.0
@@ -70,6 +83,15 @@ value_range(u :: Uniform{T1}) where T1 = u.xRange;
 
 ## ----------  Construction
 
+init_distribution(objId :: ObjectId, switches :: AbstractUniformSwitches{T1}) where T1 =
+    init_uniform(objId, switches);
+
+
+"""
+	$(SIGNATURES)
+
+Construct a Uniform distribution from its switches.
+"""    
 function init_uniform(objId :: ObjectId, switches :: UniformSwitches{T1}) where T1
     pMin = init_xmin(switches);
     pRange = init_xrange(switches);
@@ -90,8 +112,11 @@ make_test_uniform_switches() = UniformSwitches();
 make_test_uniform() = init_uniform(ObjectId(:none),  make_test_uniform_switches());
 
 
+"""
+	$(SIGNATURES)
 
-# With fixed bounds (e.g. HS GPA)
+Uniform distribution with fixed bounds (not calibrated).
+"""
 function UniformFixedBounds(objId :: ObjectId, lb :: T1, ub :: T1) where
     T1 <: AbstractFloat
 
@@ -101,10 +126,6 @@ function UniformFixedBounds(objId :: ObjectId, lb :: T1, ub :: T1) where
         xMin = lb, xMinLb = lb - 0.1, xMinUb = lb + 0.1, calXMin = false,
         xRange = dx, xRangeLb = dx - 0.1, xRangeUb = dx + 0.1, calXRange = false);
     return init_uniform(objId, s);
-    # pMin = Param(:xMin, "Lower bound", "x_{min}", lb, lb, lb - 0.1, lb + 0.1, false);
-    # pRange = Param(:xRange, "x range", "dx", dx, dx, dx - 0.1, dx + 0.1, false);
-    # pvec = ParamVector(objId, [pMin, pRange])
-    # return UniformMarginal(objId, lb, dx, pvec)
 end
 
 make_test_uniform_fixed() = UniformFixedBounds(ObjectId(:test), -1.0, 2.0);
@@ -112,7 +133,12 @@ make_test_uniform_fixed() = UniformFixedBounds(ObjectId(:test), -1.0, 2.0);
 
 ## ----------------  Uniform with mean and range
 
-@with_kw mutable struct UniformCenteredSwitches{T1 <: AbstractFloat} <: AbstractUniformSwitches{T1}
+"""
+	$(SIGNATURES)
+
+Switches for Uniform distribution that is centered around a mean.
+"""
+Base.@kwdef mutable struct UniformCenteredSwitches{T1 <: AbstractFloat} <: AbstractUniformSwitches{T1}
     xMean :: T1 = 1.0
     xMeanLb :: T1 = 0.1
     xMeanUb :: T1 = 100.0
@@ -171,16 +197,9 @@ make_test_uniform_centered() = init_uniform(ObjectId(:none),  make_test_uniform_
 
 
 
-# """
-# 	$(SIGNATURES)
-
-# Converts a N(0,1) input into a Uniform.   
-# """
-# function scale_normal_endowment(hmS :: Uniform,  inM :: T;
-#     checkMarginal :: Bool = true)  where T
-    
+# function scale_normal_draws(hmS :: AbstractUniform{F},  inM :: T)  where {F, T}
 #     cdfM = cdf.(Normal(), inM);
-#     drawM = quantile.(Uniform(hmS.xMin, hmS.xMin + hmS.xRange),  cdfM) :: T
+#     drawM = quantile.(Distributions.Uniform(min_value(hmS), max_value(hmS)),  cdfM);
 #     return drawM
 # end
 

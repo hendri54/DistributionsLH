@@ -1,10 +1,15 @@
 using Random, Test, ModelParams, DistributionsLH
 
-function uniform_test(um :: AbstractUniform{T1}) where T1 <: AbstractFloat
+function distrib_test(switches :: AbstractDistributionSwitches{T1}) where T1
+    um = init_distribution(ObjectId(:distrib), switches);
     println(um)
     T2 = eltype(um);
     @test T1 == T2
-    @test isa(max_value(um), T1)
+
+    if isbounded(um)
+        @test isa(max_value(um), T1)
+        @test min_value(um) < max_value(um)
+    end
 
     rng = MersenneTwister(123);
 
@@ -17,36 +22,32 @@ function uniform_test(um :: AbstractUniform{T1}) where T1 <: AbstractFloat
     uDraw = draw(um, rng);
     @test isa(uDraw, T1)
 
-    qV = quantiles(um, 0.0 : 0.2 : 1.0);
-    @test isa(qV, Vector{T1})
-    @test isapprox(qV[1], min_value(um))
-    @test isapprox(qV[end], max_value(um))
-    @test all(diff(qV) .> 0.0)
+    if isbounded(um)
+        qV = quantiles(um, 0.0 : 0.2 : 1.0);
+        @test isa(qV, Vector{T1})
+        @test isapprox(qV[1], min_value(um))
+        @test isapprox(qV[end], max_value(um))
+        @test all(diff(qV) .> 0.0)
+    end
+
+    inM = randn(rng, sizeV...);
+    drawM = scale_normal_draws(um, inM);
+    @test size(inM) == size(drawM)
+    @test check_draws(um, drawM)
 end
 
 
-# function um_test()
-#     switches = DistributionsLH.make_test_uniform_switches();
-#     um = init_uniform(ObjectId(:none), switches);
-#     uniform_test(um);
-# end
-
-# function um_fixed_bounds_test()
-#     um = UniformFixedBounds(ObjectId(:none), 2.0, 4.0);
-#     uniform_test(um);
-# end
-
-# function centered_test()
-#     um = DistributionsLH.make_test_uniform_centered();
-#     uniform_test(um);
-# end
-
 @testset "Uniform marginal" begin
-    for um in [DistributionsLH.make_test_uniform(), 
-        DistributionsLH.make_test_uniform_centered(),
-        DistributionsLH.make_test_uniform_fixed()]
+    for switches in [DistributionsLH.make_test_uniform_switches(), 
+        DistributionsLH.make_test_uniform_centered_switches()]
 
-        uniform_test(um);
+        distrib_test(switches);
+    end
+end
+
+@testset "Beta" begin
+    for switches in [DistributionsLH.make_test_beta_switches()]
+        distrib_test(switches);
     end
 end
 
