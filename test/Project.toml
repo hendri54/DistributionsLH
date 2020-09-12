@@ -1,0 +1,7 @@
+[deps]
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+ModelParams = "4089ccbe-b1dc-5f86-a141-4606b18b4241"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

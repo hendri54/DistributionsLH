@@ -40,4 +40,22 @@ Beta
 init_beta
 ```
 
+# Multivariate Normal Distribution
+
+The main purpose is to be able to draw random variables from the "weight matrix" which is basically a lower triangular decomposition of the covariance matrix, but with ones on the diagonal. The draws are then scaled to match the target means and standard deviations of the marginals.
+
+Also computes conditional distributions.
+
+```@docs
+MvNormalSwitches
+MvNormal
+check_weight_matrix
+cov_matrix
+check_cov_matrix
+draw_from_weights
+check_weight_matrix
+conditional_distrib
+cond_mean_weights
+```
+
 --------------

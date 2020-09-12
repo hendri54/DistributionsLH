@@ -1,7 +1,7 @@
 module DistributionsLH
 
-using DocStringExtensions, Parameters, Random
-using Distributions
+using DocStringExtensions, Parameters, Random, StatsBase, Statistics
+using Distributions, LinearAlgebra
 using ModelParams
 
 export AbstractDistributionSwitches, AbstractDistributionLH
@@ -20,6 +20,7 @@ abstract type AbstractDistributionLH{T1 <: AbstractFloat} <: ModelObject end
 
 include("uniform.jl")
 include("beta.jl");
+include("mv_normal.jl")
 
 
 ## --------  Generic
@@ -87,6 +88,11 @@ Maximum value (if any).
 """
 function max_value end
 
+
+function pretty_print(x)
+    show(stdout, MIME("text/plain"), x);
+    println("");
+end
 
 
 end # module

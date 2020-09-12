@@ -1,4 +1,4 @@
-using Documenter, DistributionsLH
+using Documenter, DistributionsLH, FilesLH
 
 makedocs(
     modules = [DistributionsLH],
@@ -10,6 +10,10 @@ makedocs(
     # clean = true,
     # checkdocs = :exports,
 )
+
+pkgDir = rstrip(normpath(@__DIR__, ".."), '/');
+@assert endswith(pkgDir, "DistributionsLH")
+deploy_docs(pkgDir);
 
 # deploydocs(
 #     repo = "github.com/hendri54/DistributionsLH.jl.git",
