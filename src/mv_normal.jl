@@ -95,6 +95,11 @@ function check_weight_matrix(m :: MvNormalLH{T1}, wtM :: AbstractMatrix{T1}) whe
 end
 
 
+"""
+	$(SIGNATURES)
+
+Check that a covariance matrix is valid for a given `MvNormalLH` object.
+"""
 function check_cov_matrix(m :: MvNormalLH{T1}, covM :: AbstractMatrix{T1}) where T1
     isValid = true;
     isValid = isValid  && (size(covM) == (n_vars(m), n_vars(m)));
@@ -135,10 +140,10 @@ For Multiple sets of conditioning observations
 
 # Outputs
 - condMeanM[observation, variable]
-condStdV(variable)
+- condStdV(variable)
     conditional means and std of each variable, given all others
     for those not in idx2V
-condCovM(variable, variable)
+- condCovM(variable, variable)
     conditional covariance; for those not in idx2
 """
 function conditional_distrib(m :: MvNormalLH{T1}, 

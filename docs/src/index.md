@@ -47,9 +47,8 @@ The main purpose is to be able to draw random variables from the "weight matrix"
 Also computes conditional distributions.
 
 ```@docs
-MvNormalSwitches
-MvNormal
-check_weight_matrix
+MvNormalLHSwitches
+MvNormalLH
 cov_matrix
 check_cov_matrix
 draw_from_weights
