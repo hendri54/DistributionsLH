@@ -1,4 +1,4 @@
-using DistributionsLH
+using DistributionsLH, ModelObjectsLH
 using Random, StatsBase, GLM, Statistics
 using Test
 

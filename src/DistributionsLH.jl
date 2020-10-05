@@ -2,7 +2,7 @@ module DistributionsLH
 
 using DocStringExtensions, Parameters, Random, StatsBase, Statistics
 using Distributions, LinearAlgebra
-using ModelParams
+using ModelObjectsLH, ModelParams
 
 export AbstractDistributionSwitches, AbstractDistributionLH
 
