@@ -55,9 +55,13 @@ Base.@kwdef mutable struct UniformSwitches{T1 <: AbstractFloat} <: AbstractUnifo
     xMin :: T1 = 1.0
     xMinLb :: T1 = 0.1
     xMinUb :: T1 = 100.0
+    xMinDescription :: String = "xMin"
+    xMinLatex :: String = "xMin"
     xRange :: T1 = 3.0
     xRangeLb :: T1 = 0.1
     xRangeUb :: T1 = 100.0
+    xRangeDescription :: String = "xRange"
+    xRangeLatex :: String = "xRange"
     calXMin :: Bool = true
     calXRange :: Bool = true
 end
@@ -101,11 +105,11 @@ function init_uniform(objId :: ObjectId, switches :: UniformSwitches{T1}) where 
 end
 
 init_xmin(s :: UniformSwitches{T1}) where T1 = 
-    Param(:xMin, "Lower bound", "x_{min}", s.xMin, s.xMin, 
+    Param(:xMin, s.xMinDescription, s.xMinLatex, s.xMin, s.xMin, 
         s.xMinLb, s.xMinUb, s.calXMin);
 
 init_xrange(s :: AbstractUniformSwitches{T1}) where T1 =
-    Param(:xRange, "x range", "dx", s.xRange, s.xRange, 
+    Param(:xRange, s.xRangeDescription, s.xRangeLatex, s.xRange, s.xRange, 
         s.xRangeLb, s.xRangeUb, s.calXRange);
 
 make_test_uniform_switches() = UniformSwitches();
@@ -142,9 +146,13 @@ Base.@kwdef mutable struct UniformCenteredSwitches{T1 <: AbstractFloat} <: Abstr
     xMean :: T1 = 1.0
     xMeanLb :: T1 = 0.1
     xMeanUb :: T1 = 100.0
+    xMeanDescription :: String = "xMean"
+    xMeanLatex :: String = "xMean"
     xRange :: T1 = 3.0
     xRangeLb :: T1 = 0.1
     xRangeUb :: T1 = 100.0
+    xRangeDescription :: String = "xRange"
+    xRangeLatex :: String = "xRange"
     calXMean :: Bool = true
     calXRange :: Bool = true
 end
@@ -179,7 +187,7 @@ function init_uniform(objId :: ObjectId, switches :: UniformCenteredSwitches)
 end
 
 init_xmean(s :: UniformCenteredSwitches) = 
-    Param(:xMean, "Mean", "x_{mean}", s.xMean, s.xMean, 
+    Param(:xMean, s.xMeanDescription, s.xMeanLatex, s.xMean, s.xMean, 
         s.xMeanLb, s.xMeanUb, s.calXMean);
 
 make_test_uniform_centered_switches() = UniformCenteredSwitches();

@@ -69,15 +69,23 @@ Base.@kwdef mutable struct BetaSwitches{T1 <: AbstractFloat} <: AbstractBetaSwit
     xMin :: T1 = 1.0
     xMinLb :: T1 = 0.1
     xMinUb :: T1 = 100.0
+    xMinDescription :: String = "Lower bound"
+    xMinLatex :: String = "x_{min}"
     xRange :: T1 = 3.0
     xRangeLb :: T1 = 0.1
     xRangeUb :: T1 = 100.0
+    xRangeDescription :: String = "Range"
+    xRangeLatex :: String = "dx"
     alpha :: T1 = 2.0
     alphaLb :: T1 = 1.0
     alphaUb :: T1 = 3.0
+    alphaDescription :: String = "alpha"
+    alphaLatex :: String = "\\alpha"
     beta :: T1 = 2.0
     betaLb :: T1 = 1.0
     betaUb :: T1 = 5.0
+    betaDescription :: String = "beta"
+    betaLatex :: String = "\\beta"
     calXMin :: Bool = true
     calXRange :: Bool = true
     calAlpha :: Bool = true
@@ -121,19 +129,19 @@ function init_beta(objId :: ObjectId, switches :: BetaSwitches{T1}) where T1
 end
 
 init_xmin(s :: AbstractBetaSwitches{T1}) where T1 = 
-    Param(:xMin, "Lower bound", "x_{min}", s.xMin, s.xMin, 
+    Param(:xMin, s.xMinDescription, s.xMinLatex, s.xMin, s.xMin, 
         s.xMinLb, s.xMinUb, s.calXMin);
 
 init_xrange(s :: AbstractBetaSwitches{T1}) where T1 =
-    Param(:xRange, "x range", "dx", s.xRange, s.xRange, 
+    Param(:xRange, s.xRangeDescription, s.xRangeLatex, s.xRange, s.xRange, 
         s.xRangeLb, s.xRangeUb, s.calXRange);
 
 init_alpha_param(s :: AbstractBetaSwitches{T1}) where T1 =
-    Param(:alpha, "alpha", "alpha", s.alpha, s.alpha, 
+    Param(:alpha, s.alphaDescription, s.alphaLatex, s.alpha, s.alpha, 
         s.alphaLb, s.alphaUb, s.calAlpha);
 
 init_beta_param(s :: AbstractBetaSwitches{T1}) where T1 =
-    Param(:beta, "beta", "beta", s.beta, s.beta, 
+    Param(:beta, s.betaDescription, s.betaLatex, s.beta, s.beta, 
         s.betaLb, s.betaUb, s.calBeta);
             
 
