@@ -14,12 +14,16 @@ export init_uniform
 # Beta
 export AbstractBeta, AbstractBetaSwitches, Beta, BetaSwitches
 export init_beta, alpha_value, beta_value
+# Normal
+export NormalSwitches, Normal
+export init_normal
 
 abstract type AbstractDistributionSwitches{T1 <: AbstractFloat} end
 abstract type AbstractDistributionLH{T1 <: AbstractFloat} <: ModelObject end
 
 include("uniform.jl")
 include("beta.jl");
+include("normal.jl");
 include("mv_normal.jl")
 
 
@@ -61,7 +65,7 @@ function quantiles end
 Converts N(0,1) draws into the specified distribution.
 """
 function scale_normal_draws(b :: AbstractDistributionLH{F},  inM :: T)  where {F, T}
-    cdfM = cdf.(Normal(), inM);
+    cdfM = cdf.(Distributions.Normal(), inM);
     drawM = quantiles(b,  cdfM);
     return drawM
 end

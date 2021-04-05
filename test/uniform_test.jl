@@ -51,4 +51,10 @@ end
     end
 end
 
+@testset "Normal" begin
+    for switches in [DistributionsLH.make_test_normal_switches()]
+        distrib_test(switches);
+    end
+end
+
 # ----------
