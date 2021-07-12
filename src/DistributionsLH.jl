@@ -1,6 +1,6 @@
 module DistributionsLH
 
-using DocStringExtensions, Parameters, Random, StatsBase, Statistics
+using DocStringExtensions, Lazy, Parameters, Random, StatsBase, Statistics
 using Distributions, LinearAlgebra
 using ModelObjectsLH, ModelParams
 
@@ -18,8 +18,8 @@ export init_beta, alpha_value, beta_value
 export NormalSwitches, Normal
 export init_normal
 
-abstract type AbstractDistributionSwitches{T1 <: AbstractFloat} end
-abstract type AbstractDistributionLH{T1 <: AbstractFloat} <: ModelObject end
+abstract type AbstractDistributionSwitches{T1} <: ModelSwitches end
+abstract type AbstractDistributionLH{T1} <: ModelObject end
 
 include("uniform.jl")
 include("beta.jl");

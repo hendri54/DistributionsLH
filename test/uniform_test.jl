@@ -1,5 +1,7 @@
 using Random, Test, ModelParams, DistributionsLH
 
+mdl = DistributionsLH;
+
 function distrib_test(switches :: AbstractDistributionSwitches{T1}) where T1
     um = init_distribution(ObjectId(:distrib), switches);
     println(um)
@@ -38,21 +40,22 @@ end
 
 
 @testset "Uniform marginal" begin
-    for switches in [DistributionsLH.make_test_uniform_switches(), 
-        DistributionsLH.make_test_uniform_centered_switches()]
+    for switches in [mdl.make_test_uniform_switches(), 
+        mdl.make_test_uniform_centered_switches()]
 
         distrib_test(switches);
     end
 end
 
 @testset "Beta" begin
-    for switches in [DistributionsLH.make_test_beta_switches()]
+    for switches in [mdl.make_test_beta_switches()]
         distrib_test(switches);
     end
 end
 
 @testset "Normal" begin
-    for switches in [DistributionsLH.make_test_normal_switches()]
+    for switches in (mdl.make_test_normal_switches(),
+        mdl.make_test_log_normal_switches())
         distrib_test(switches);
     end
 end
