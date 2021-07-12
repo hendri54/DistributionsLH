@@ -1,23 +1,7 @@
 mutable struct NormalSwitches{T1} <: AbstractDistributionSwitches{T1} 
     pvec :: ParamVector
-    logNormal :: Bool
-    # mean :: T1 = 0.0
-    # meanLb :: T1 = -10.0
-    # meanUb :: T1 = 10.0
-    # meanDescription :: String = "Mean"
-    # meanLatex :: String = "Mean"
-    # calMean :: Bool = true
-    # std :: T1 = 1.0
-    # stdLb :: T1 = 0.0
-    # stdUb :: T1 = 10.0
-    # stdDescription :: String = "Std deviation"
-    # stdLatex :: String = "Std"
-    # calStd :: Bool = true
+    # logNormal :: Bool
 end
-
-# mutable struct LogNormalSwitches{T1} <: AbstractDistributionSwitches{T1} 
-#     pvec :: ParamVector
-# end
 
 mutable struct Normal{T1} <: AbstractDistributionLH{T1}
     objId :: ObjectId
@@ -26,39 +10,40 @@ mutable struct Normal{T1} <: AbstractDistributionLH{T1}
     std :: T1
 end
 
+
 ## ------------  Generic
 
 Lazy.@forward Normal.switches (
-    is_lognormal,
     ModelParams.get_pvector
 );
 
-function exp_draws!(drawV)
-    for (j, x) in enumerate(drawV)
-        drawV[j] = exp(x);
-    end
-end
+
+# function exp_draws!(drawV)
+#     for (j, x) in enumerate(drawV)
+#         drawV[j] = exp(x);
+#     end
+# end
 
 function draw(u :: Normal{T1}, nDims, rng :: AbstractRNG) where T1
     drawV = u.mean .+ u.std .* randn(rng, T1, nDims...);
-    is_lognormal(u)  &&  exp_draws!(drawV);
+    # is_lognormal(u)  &&  exp_draws!(drawV);
     return drawV
 end
 
 function draw(u :: Normal{T1}, rng :: AbstractRNG)  where T1
     drawV = u.mean + u.std * rand(rng, T1);
-    is_lognormal(u)  &&  (drawV = exp(drawV));
+    # is_lognormal(u)  &&  (drawV = exp(drawV));
     return drawV
 end
 
 function quantiles(u :: Normal{T1}, pctV)  where T1
     normalDistr = Distributions.Normal(u.mean, u.std);
     qV = Distributions.quantile.(normalDistr, pctV);
-    is_lognormal(u)  &&  exp_draws!(qV);
+    # is_lognormal(u)  &&  exp_draws!(qV);
     return qV
 end
 
-is_lognormal(switches :: NormalSwitches{T1}) where T1 = switches.logNormal;
+# is_lognormal(switches :: NormalSwitches{T1}) where T1 = switches.logNormal;
 
 Base.eltype(::Normal{T1}) where T1 = T1;
 
@@ -70,9 +55,9 @@ Base.show(io :: IO, um :: Normal{T1}) where T1 =
 # Validate draws
 function check_draws(u :: Normal{T1}, drawM) where T1
     isValid = true;
-    if is_lognormal(u)
-        isValid = isValid  &&  all(x -> x > zero(T1), drawM);
-    end
+    # if is_lognormal(u)
+    #     isValid = isValid  &&  all(x -> x > zero(T1), drawM);
+    # end
     return isValid
 end
 
@@ -92,13 +77,13 @@ function init_normal(switches :: NormalSwitches{T1}) where T1
         param_default_value(pvec, :std))
 end
 
-function init_normal_switches(objId :: ObjectId; logNormal = false,
-    meanVal = 0.0, stdVal = 1.0)
+function init_normal_switches(objId :: ObjectId; 
+    meanVal = 0.0, stdVal = 1.0, calMean = true, calStd = true)
     T1 = typeof(meanVal);
-    pMean = init_mean(; meanVal);
-    pStd = init_std(; stdVal);
+    pMean = init_mean(; meanVal, calMean);
+    pStd = init_std(; stdVal, calStd);
     pvec = ParamVector(objId, [pMean, pStd]);
-    return NormalSwitches{T1}(pvec, logNormal)
+    return NormalSwitches{T1}(pvec)
 end
 
 function init_mean(; descr = "Mean", lsym = "μ", meanVal = 0.0,
@@ -112,11 +97,8 @@ function init_std(; descr = "StdDev", lsym = "σ", stdVal = 1.0,
 end
         
 make_test_normal_switches() = init_normal_switches(ObjectId(:none);
-    logNormal = false, meanVal = 1.2, stdVal = 2.3);
+    meanVal = 1.2, stdVal = 2.3);
 make_test_normal() = init_normal(make_test_normal_switches());
 
-make_test_log_normal_switches() = init_normal_switches(ObjectId(:none);
-    logNormal = true, meanVal = 1.2, stdVal = 2.3); 
-make_test_log_normal() = init_normal(make_test_log_normal_switches());
     
 # ---------------

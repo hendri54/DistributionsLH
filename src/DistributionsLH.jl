@@ -15,15 +15,16 @@ export init_uniform
 export AbstractBeta, AbstractBetaSwitches, Beta, BetaSwitches
 export init_beta, alpha_value, beta_value
 # Normal
-export NormalSwitches, Normal
-export init_normal
+export NormalSwitches, Normal, LogNormalSwitches, LogNormal
+export init_normal, init_log_normal, init_normal_switches, init_log_normal_switches
 
 abstract type AbstractDistributionSwitches{T1} <: ModelSwitches end
 abstract type AbstractDistributionLH{T1} <: ModelObject end
 
-include("uniform.jl")
+include("uniform.jl");
 include("beta.jl");
 include("normal.jl");
+include("log_normal.jl");
 include("mv_normal.jl")
 
 
