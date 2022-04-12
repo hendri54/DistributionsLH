@@ -30,6 +30,28 @@ include("mv_normal.jl")
 
 ## --------  Generic
 
+# Makes it easy to implement StructLH.describe
+describe(switches :: AbstractDistributionSwitches{T1}) where T1 = 
+    ["Distribution"  "$(typeof(switches))"];
+
+function calibrated_string(val, isCalibrated :: Bool)
+    if isCalibrated
+        return "calibrated";
+    else
+        return "fixed at $val";
+    end
+end
+
+function calibrated_string(p :: Param)
+    calibrated_string(default_value(p), is_calibrated(p));
+end
+
+function calibrated_string(pv :: ParamVector, vName :: Symbol)
+    calibrated_string(retrieve(pv, vName));
+end
+
+
+
 """
 	init_distribution(objId, switches)
 

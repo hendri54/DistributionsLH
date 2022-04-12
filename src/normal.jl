@@ -17,6 +17,11 @@ Lazy.@forward Normal.switches (
     ModelParams.get_pvector
 );
 
+describe(switches :: NormalSwitches{T1}) where T1 = [
+    "Normal distribution"  " ";
+    "mean"  calibrated_string(switches.pvec, :mean);
+    "std dev"  calibrated_string(switches.pvec, :std)
+    ];
 
 # function exp_draws!(drawV)
 #     for (j, x) in enumerate(drawV)
@@ -92,7 +97,7 @@ function init_mean(; descr = "Mean", lsym = "μ", meanVal = 0.0,
 end
 
 function init_std(; descr = "StdDev", lsym = "σ", stdVal = 1.0,
-    stdLb = 0.0, stdUb = 10.0, calStd = true)
+    stdLb = 0.0, stdUb = 2.0, calStd = true)
     return Param(:std, descr, lsym, stdVal, stdVal, stdLb, stdUb, calStd);
 end
         

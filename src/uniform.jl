@@ -84,6 +84,13 @@ min_value(u :: Uniform{T1}) where T1 = u.xMin;
 max_value(u :: Uniform{T1}) where T1 = u.xMin + u.xRange;
 value_range(u :: Uniform{T1}) where T1 = u.xRange;
 
+function describe(switches :: UniformSwitches{T1}) where T1
+    return [
+        "Uniform distribution"  " ";
+        "Min value"  calibrated_string(switches.xMin, switches.calXMin);
+        "Range"  calibrated_string(switches.xRange, switches.calXRange)
+        ];
+end
 
 ## ----------  Construction
 

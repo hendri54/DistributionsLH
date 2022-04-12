@@ -65,13 +65,14 @@ function init_log_normal(switches :: LogNormalSwitches{T1}) where T1
 end
 
 function init_log_normal_switches(objId :: ObjectId; 
-    lbVal = 1.0, meanVal = 0.0, stdVal = 1.0, 
-    calLb = false, calMean = true, calStd = true
+    lbVal = 1.0, calLb = false, 
+    meanVal = 0.0, calMean = true, 
+    stdVal = 0.5, stdLb = 0.1, stdUb = 1.0, calStd = true
     )
     T1 = typeof(meanVal);
     pLb = init_lb(; lbVal, calLb);
     pMean = init_mean(; meanVal, calMean);
-    pStd = init_std(; stdVal, calStd);
+    pStd = init_std(; stdVal, stdLb, stdUb, calStd);
     pvec = ParamVector(objId, [pLb, pMean, pStd]);
     return LogNormalSwitches{T1}(pvec)
 end
