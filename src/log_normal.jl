@@ -11,7 +11,7 @@ mutable struct LogNormal{T1} <: AbstractDistributionLH{T1}
 end
 
 Lazy.@forward LogNormal.switches (
-    ModelParams.get_pvector
+    ModelParams.get_pvector, describe
 );
 
 

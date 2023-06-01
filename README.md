@@ -6,4 +6,10 @@ The main purpose is to wrap distributions into containers so that their paramete
 
 [Documentation](lhendricks.org/julia/DistributionsLH/index.html).
 
+## Change Log 2023
+
+May-4: `init_normal_switches` accepts symbols for mean and std. Avoids unicode characters that cause issues with latex.
+Apr-5: Added DegenerateDistribution.
+Feb-3: Replaced ModelParams.value with pvalue.
+
 # ----------------

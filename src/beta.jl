@@ -110,6 +110,14 @@ mutable struct Beta{T1} <: AbstractBeta{T1}
 end
 
 
+describe(switches :: BetaSwitches) = [
+    "Beta distribution" " "
+    ];
+
+describe(b :: Beta) = [
+    "Beta distribution" " "
+    ];
+    
 """
 	$(SIGNATURES)
 
@@ -121,11 +129,11 @@ function init_beta(objId :: ObjectId, switches :: BetaSwitches{T1}) where T1
     pAlpha = init_alpha_param(switches);
     pBeta = init_beta_param(switches);
     pvec = ParamVector(objId, [pMin, pRange, pAlpha, pBeta]);
-    xMin = ModelParams.value(pMin);
+    xMin = pvalue(pMin);
     # betaDistr = Distributions.Beta(alpha, beta);
     return Beta(objId, pvec, 
-        ModelParams.value(pMin), ModelParams.value(pRange), 
-        ModelParams.value(pAlpha), ModelParams.value(pBeta));
+        pvalue(pMin), pvalue(pRange), 
+        pvalue(pAlpha), pvalue(pBeta));
 end
 
 init_xmin(s :: AbstractBetaSwitches{T1}) where T1 = 

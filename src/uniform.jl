@@ -92,6 +92,13 @@ function describe(switches :: UniformSwitches{T1}) where T1
         ];
 end
 
+function describe(u :: Uniform)
+    return [
+        "Uniform distribution"  "in range $(min_value(u)) to $(max_value(u))"
+    ]
+end
+
+
 ## ----------  Construction
 
 init_distribution(objId :: ObjectId, switches :: AbstractUniformSwitches{T1}) where T1 =
@@ -107,8 +114,8 @@ function init_uniform(objId :: ObjectId, switches :: UniformSwitches{T1}) where 
     pMin = init_xmin(switches);
     pRange = init_xrange(switches);
     pvec = ParamVector(objId, [pMin, pRange]);
-    xMin = ModelParams.value(pMin);
-    return Uniform(objId, xMin, ModelParams.value(pRange), pvec)
+    xMin = pvalue(pMin);
+    return Uniform(objId, xMin, pvalue(pRange), pvec)
 end
 
 init_xmin(s :: UniformSwitches{T1}) where T1 = 
@@ -182,6 +189,10 @@ min_value(u :: UniformCentered{T1}) where T1 = u.xMean - 0.5 * u.xRange;
 max_value(u :: UniformCentered{T1}) where T1 = (u.xMean + 0.5 * u.xRange);
 value_range(u :: UniformCentered{T1}) where T1 = u.xRange;
 
+describe(u :: UniformCentered) = [
+    "Centered Uniform"  "in range $(min_value(u)) to $(max_value(u))"
+    ];
+
 
 ## ----------  Construction
 
@@ -189,8 +200,8 @@ function init_uniform(objId :: ObjectId, switches :: UniformCenteredSwitches)
     pMean = init_xmean(switches);
     pRange = init_xrange(switches);
     pvec = ParamVector(objId, [pMean, pRange]);
-    xMean = ModelParams.value(pMean);
-    return UniformCentered(objId, xMean, ModelParams.value(pRange), pvec)
+    xMean = pvalue(pMean);
+    return UniformCentered(objId, xMean, pvalue(pRange), pvec)
 end
 
 init_xmean(s :: UniformCenteredSwitches) = 

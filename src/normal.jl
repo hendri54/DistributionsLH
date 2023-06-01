@@ -14,7 +14,7 @@ end
 ## ------------  Generic
 
 Lazy.@forward Normal.switches (
-    ModelParams.get_pvector
+    ModelParams.get_pvector, describe
 );
 
 describe(switches :: NormalSwitches{T1}) where T1 = [
@@ -83,20 +83,21 @@ function init_normal(switches :: NormalSwitches{T1}) where T1
 end
 
 function init_normal_switches(objId :: ObjectId; 
-    meanVal = 0.0, stdVal = 1.0, calMean = true, calStd = true)
+        meanVal = 0.0, meanSym = "mu", calMean = true,
+        stdVal = 1.0,  stdSym = "std", calStd = true)
     T1 = typeof(meanVal);
-    pMean = init_mean(; meanVal, calMean);
-    pStd = init_std(; stdVal, calStd);
+    pMean = init_mean(; meanVal, lsym = meanSym, calMean);
+    pStd = init_std(; stdVal, lsym = stdSym, calStd);
     pvec = ParamVector(objId, [pMean, pStd]);
     return NormalSwitches{T1}(pvec)
 end
 
-function init_mean(; descr = "Mean", lsym = "μ", meanVal = 0.0,
+function init_mean(; descr = "Mean", lsym = "mu", meanVal = 0.0,
     meanLb = -10.0, meanUb = 10.0, calMean = true)
     return Param(:mean, descr, lsym, meanVal, meanVal, meanLb, meanUb, calMean);
 end
 
-function init_std(; descr = "StdDev", lsym = "σ", stdVal = 1.0,
+function init_std(; descr = "StdDev", lsym = "sig", stdVal = 1.0,
     stdLb = 0.0, stdUb = 2.0, calStd = true)
     return Param(:std, descr, lsym, stdVal, stdVal, stdLb, stdUb, calStd);
 end

@@ -8,6 +8,8 @@ export AbstractDistributionSwitches, AbstractDistributionLH
 
 # Generic functions
 export init_distribution, draw, check_draws, isbounded, min_value, max_value, quantiles, scale_normal_draws
+# Degenerate
+export DegenerateSwitches, DegenerateDistribution;
 # Uniform
 export AbstractUniform, AbstractUniformSwitches, Uniform, UniformSwitches, UniformCentered, UniformCenteredSwitches, UniformFixedBounds
 export init_uniform
@@ -21,6 +23,7 @@ export init_normal, init_log_normal, init_normal_switches, init_log_normal_switc
 abstract type AbstractDistributionSwitches{T1} <: ModelSwitches end
 abstract type AbstractDistributionLH{T1} <: ModelObject end
 
+include("degenerate.jl");
 include("uniform.jl");
 include("beta.jl");
 include("normal.jl");
