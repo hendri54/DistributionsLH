@@ -2,7 +2,14 @@ module DistributionsLH
 
 using DocStringExtensions, Lazy, Parameters, Random, StatsBase, Statistics
 using Distributions, LinearAlgebra
-using ModelObjectsLH, ModelParams
+using CommonLH: ObjectId, ModelObject, ModelSwitches, SingleId,
+    make_object_id, make_child_id, own_name, make_string, ObjIdSeparator,
+    get_object_id, is_model_object, collect_model_objects,
+    collect_model_objects_for_any, collect_object_ids, get_child_objects,
+    find_object, find_only_object, get_value,
+    object_structure, show_object_structure, has_index, make_single_id,
+    n_parents, description
+using ModelParams
 
 export AbstractDistributionSwitches, AbstractDistributionLH
 

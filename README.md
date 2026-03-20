@@ -6,6 +6,11 @@ The main purpose is to wrap distributions into containers so that their paramete
 
 [Documentation](lhendricks.org/julia/DistributionsLH/index.html).
 
+## Change Log 2025
+
+Jun-30: v2
+- ModelParams v5
+
 ## Change Log 2023
 
 Aug-1: ModelParams v4
